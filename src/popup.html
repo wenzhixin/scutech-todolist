@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>popup</title>
+    <meta name="description" content="" />
+    <meta name="author" content="zhixin wen" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/datepicker.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/common.css" />
+  </head>
+  <body>
+    <div class="w500 bc">
+      <!-- header -->
+      <div class="header">
+        <div class="fl pr">
+          <a id="showProjects" href="#">显示项目</a>
+          <div class="project_menu">
+            <div>
+              <a class="show_project_list" data-type="today" href="#">今天</a>
+              <span class="project_today label label-success mr5"></span>
+              <a class="show_project_list" data-type="all" href="#">所有</a>
+              <span class="project_all label label-success"></span>
+            </div>
+            <ul class="nav nav-list"></ul>
+            <div class="project_add mt10">
+              <div>
+                <a id="addProject" href="#">添加项目</a>
+              </div>
+              <div class="project_input input-append none">
+                <input name="projectName" type="text" class="input-small"
+                placeholder="项目名称" required="required" />
+                <a id="projectOk" href="#" class="btn btn-primary">确定</a>
+                <a id="projectCancel" href="#" class="btn">取消</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fr">
+          <a id="completedLink" class="show_project_list mr10" data-type="completed" href="#"><span></span> 已完成</a>
+          <a id="addTask" href="#" title="添加任务"> <i class="icon-plus-sign"></i> </a>
+        </div>
+      </div>
+      <!-- header end -->
+      <!-- content -->
+      <div class="content">
+        <ul class="nav nav-list"></ul>
+      </div>
+      <!-- content end -->
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/bootbox.js"></script>
+    <script src="js/localstoragedb.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/popup.js"></script>
+  </body>
+</html>

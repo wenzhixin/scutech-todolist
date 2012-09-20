@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>test</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/localstoragedb.js"></script>
+  <script src="js/database.js"></script>
+  <script>
+  	$(function() {
+  		var projectManager = new ProjectManager();
+  		// projectManager.addProject({name: "生活"}, function(result) {
+  			// console.log("addProject: " + result);
+  		// });
+  		// projectManager.deleteProject(2, function(result) {
+  			// console.log("deleteProject: " + JSON.stringify(result));
+  		// });
+  		// projectManager.updateProject({id: 1, name: "工作"}, function(result) {
+  			// console.log("updateProject: " + JSON.stringify(result));
+  		// });
+  		projectManager.getProjects(function(result) {
+  			console.log("getProjects: " + JSON.stringify(result));
+  		});
+  		// projectManager.getProject(1, function(result) {
+  			// console.log("getProject: " + JSON.stringify(result));
+  		// });
+  		
+  		var taskManager = new TaskManager();
+  		// taskManager.addTask({
+  			// title: "权威指南第3章",
+  			// date: new Date(),
+  			// project_id: 3
+  		// }, function(result) {
+  			// console.log("addTask: " + result);
+  		// });
+  		// taskManager.deleteTask(2, function(result) {
+  			// console.log("deleteTask: " + JSON.stringify(result));
+  		// });
+  		// taskManager.updateTask({
+	  			// id: 4,
+	  			// title: "完成接口以及单元测试OK",
+	  			// date: new Date()
+  			// }, function(result) {
+  			// console.log("updateTask: " + result);
+  		// });
+  		// taskManager.updateTaskStatus(5, taskManager.COMPLETED, function(result) {
+  			// console.log("updateTaskStatus: " + result);
+  		// });
+  		// taskManager.deferTask(7, function(result) {
+  			// console.log("deferTask: " + result);
+  		// });
+  		taskManager.getAllTasks(function(tasks) {
+  			console.log("getAllTasks: " + JSON.stringify(tasks));
+  		});
+  		taskManager.getTodayTasks(function(tasks) {
+  			console.log("getTodayTasks: " + JSON.stringify(tasks));
+  		});
+  		taskManager.getCompletedTasks(function(tasks) {
+  			console.log("getCompletedTasks: " + JSON.stringify(tasks));
+  		});
+  	});
+  </script>
+</head>
+<body>
+	<a class="test1" href="#">test</a>
+	<a class="test2" href="#">test</a>
+</body>
+</html>

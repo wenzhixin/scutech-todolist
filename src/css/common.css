@@ -1,0 +1,64 @@
+body {
+	font-size: 12px;
+}
+
+a:focus {
+	outline: none;
+}
+
+.header {
+	height: 30px;
+	line-height: 30px;
+	top: 0;
+	padding: 0 10px;
+	background: #F8F8F8 -webkit-linear-gradient(top,white,#EEE);
+	border-bottom: 1px solid #E5E5E5;
+	box-shadow: 0 2px 2px #EEE;
+}
+
+.project_menu {
+	width: 230px;
+	position: absolute;
+	display: none;
+	border: 1px solid #CCC;
+	background-color: white;
+	padding: 3px 5px 3px 15px;
+	box-shadow: 0 1px 5px #AAA;
+}
+
+.count_color {
+	border-left: #DDD solid 5px;
+	padding: 0 5px 0 2px;
+}
+
+.content {
+	height: 400px;
+	border: 1px solid #E5E5E5;
+}
+
+.nav-list  .nav-header {
+  	margin-left: 0;
+  	margin-right: 0;
+}
+
+.content > ul > li {
+	padding: 8px 0;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+.nav .project_input {
+	margin-left: -15px;
+}
+
+.modal {
+	width: 250px;
+	margin-left: -125px;
+}
+
+.input_select {
+	width: 95px;
+}
+
+.input_date {
+	width: 75px;
+}
