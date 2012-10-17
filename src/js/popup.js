@@ -9,6 +9,8 @@ $(function() {
 	var projectManager = new ProjectManager();
 	var taskManager = new TaskManager();
 	var projectList = new Array();
+	var showType = "today";
+	var showProject;
 	
 	function main() {
 		initProjectEvents();
@@ -56,7 +58,8 @@ $(function() {
 			e.stopPropagation();
 			var $li = $(this).parents("li[data-index]");
 			var id = $li.attr("data-index");
-			bootbox.confirm("确定删除该项目：" + projectList[$li.index()].name + "？", function() {
+			bootbox.confirm("确定删除该项目：" + projectList[$li.index()].name + "？", function(flag) {
+				if (!flag) return;
 				projectManager.deleteProject(id, function(result) {
 					if (result) {
 						initProjects();
@@ -120,8 +123,7 @@ $(function() {
 				bootbox.alert("您还未添加项目！");
 				return;
 			}
-			bootbox.confirm(template.task.addItem(projectList), "添加任务", function(result) {
-				if (!result) return;
+			var addOk = function() {
 				var task = new Object();
 				task.project_id = $(".input_select").val();
 				task.date = $(".input_date").val();
@@ -138,6 +140,10 @@ $(function() {
 						bootbox.alert("添加失败！");
 					}
 				});
+			};
+			bootbox.confirm(template.task.addItem(projectList), "添加任务", function(flag) {
+				if (!flag) return;
+				addOk();
 			});
 			$(".datepicker").remove();
 			$(".input_datepicker").datepicker({
@@ -145,6 +151,12 @@ $(function() {
 				format: "yyyy-mm-dd"
 			}).on('changeDate', function(date) {
 				$(".input_datepicker").datepicker('hide');
+			});
+			$("input[name='taskTitle']").keyup(function(e) {
+				if (e.keyCode == 13) {
+					addOk(true);
+					$("input[name='taskTitle']").val("");
+				}
 			});
 		};
 		var updateStatus = function() {
@@ -155,9 +167,73 @@ $(function() {
 				initTasks();
 			});
 		};
+		var getTaskId = function(target) {
+			var $li = $(target).parents("li.form-inline");
+			var id = $("input[name='taskStatus']", $li).val();
+			return id;
+		}
+		var deferTask = function(e) {
+			e.stopPropagation();
+			taskManager.deferTask(getTaskId(this), function() {
+				initProjects();
+			});
+		};
+		var editTask = function(e) {
+			e.stopPropagation();
+			taskManager.getTask(getTaskId(this), function(task) {
+				var updateOk = function() {
+					task.project_id = $(".input_select").val();
+					task.date = $(".input_date").val();
+					task.title = $.trim($("input[name='taskTitle']").val());
+					if (!task.title) {
+						$("input[name='taskTitle']").focus();
+						return false;
+					}
+					taskManager.updateTask(task, function(result) {
+						if (result) {
+							initProjects();
+						}
+						else {
+							bootbox.alert("修改失败！");
+						}
+					});
+				}
+				bootbox.confirm(template.task.addItem(projectList), "修改任务", function(flag) {
+					if (!flag) return;
+					updateOk();
+				});
+				$(".input_select").val(task.project_id);
+				$(".datepicker").remove();
+				$(".input_datepicker").datepicker({
+					date: new Date(task.date),
+					format: "yyyy-mm-dd"
+				}).on('changeDate', function(date) {
+					$(".input_datepicker").datepicker('hide');
+				});
+				$("input[name='taskTitle']").val(task.title);
+			});
+		};
+		var removeTask = function(e) {
+			e.stopPropagation();
+			var id = getTaskId(this);
+			bootbox.confirm("确定删除该任务？", function(flag) {
+				if (!flag) return;
+				taskManager.deleteTask(id, function(result) {
+					if (result) {
+						initProjects();
+						initTasks();
+					} else {
+						
+					}
+				});
+			});
+		};
 		
 		$("#addTask").click(addTask);
 		$(document).on("change", "input[name='taskStatus']", updateStatus);
+		$(document).on("click", ".task_defer", deferTask);
+		$(document).on("click", ".task_edit", editTask);
+		$(document).on("click", ".task_remove", removeTask);
 	}
 	
 	function initProjects() {
@@ -184,17 +260,35 @@ $(function() {
 			}
 			$projectNav.html(html);
 			$(".dropdown", $projectNav).append(template.project.menu);
-			showTasks("today");
+			showTasks(showType, showProject);
 		});
 	}
 	
 	function initTasks() {
+		taskManager.getExpiredTasks(function(tasks) {
+			var count = 0;
+			if (tasks) {
+				count += tasks.length;
+			}
+			taskManager.getTodayTasks(function(tasks) {
+				if (tasks) {
+					count += tasks.length;
+				}
+				try {
+					chrome.browserAction.setBadgeText({text: count > 0 ? count + "" : ""});
+				} catch(e) {
+					
+				}
+			});
+		});
 		taskManager.getCompletedTasks(function(tasks) {
 			$("#completedLink span").text(tasks.length);
 		});
 	}
 	
 	function showTasks(type, project) {
+		showType = type;
+		showProject = project;
 		var $listview = $(".content .nav");
 		switch (type) {
 		case "today":
@@ -238,12 +332,21 @@ $(function() {
 					title: "已完成", 
 					list: getTasksLabel("date", tasks)
 				}));
+				$("label.checkbox", $listview).addClass("lth");
 			});
 			break;
 			break;
 		default:
 			break;
 		}
+		//fix menu position
+		$(".taskmenu").unbind("click").bind("click", function (e) {
+			if (e.pageY > 320) {
+				$(this).next().css("margin-top", "-110px");
+			} else {
+				$(this).next().css("margin-top", "2px");
+			}
+		});
 	}
 	
 	function getTasksLabel(type, tasks) {

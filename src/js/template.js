@@ -43,18 +43,18 @@
 				for (var i = 0; i < obj.list.length; i++) {
 					var task = obj.list[i];
 					list +=	"<li class='form-inline'>" +
-								"<label class='checkbox'>" +
-									"<input name='taskStatus' type='checkbox' value='" + task.id + "'" + 
-									(task.status == "completed" ? " checked='checked'" : "") + " />" + 
+								"<input name='taskStatus' type='checkbox' value='" + task.id + "'" + 
+								(task.status == "completed" ? " checked='checked'" : "") + " />" + 
+								"<label class='checkbox ml5'>" +
 									task.title +
 								"</label>" +
 								"<div class='dropdown fr'>" +
+									"<i class='taskmenu icon-cog ml5 fr' data-toggle='dropdown'></i>" +
+									this.menu() +
 									"<span" + (task.label ? " class='label" + 
 											(obj.labelCls ? " badge-" + obj.labelCls : "") + "'>" + 
 											task.label : ">" + task.label) + 
 									"</span>" +
-									"<i class='icon-cog ml5' data-toggle='dropdown'></i>" +
-									this.menu() +
 								"</div>" +
 							"</li>";
 				}
@@ -81,7 +81,7 @@
 				return "" +
 					"<ul class='dropdown-menu' role='menu'>" +
 						"<li>" +
-							"<a class='task_edit' href='#'>" +
+							"<a class='task_defer' href='#'>" +
 								"<i class='icon-edit'></i>延期" +
 							"</a>" +
 						"</li>" + 

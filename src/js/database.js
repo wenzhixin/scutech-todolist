@@ -49,6 +49,7 @@
 			
 			getProjects: function(callback) {
 				var rows = lib.query(PROJECT);
+				if (rows.length == 0) callback(rows);
 				var getTasksCount = function(rows, project, completed) {
 					taskManager.getProjectTasks(project.id, function(results) {
 						project.count = results.length;
@@ -103,6 +104,7 @@
 				lib.update(TASK, {id: task.id}, function(row) {
 					row.title = task.title;
 					row.date = task.date;
+					row.project_id = task.project_id;
 					return row;
 				});
 				lib.commit();
@@ -136,6 +138,16 @@
 				});
 				lib.commit();
 				callback(true);
+			},
+			
+			getTask: function(id, callback) {
+				var that = this;
+				var result = lib.query(TASK, {id: id});
+				if (result && result.length > 0) {
+					callback(result[0]);
+				} else {
+					callback();
+				}
 			},
 			
 			getTodayTasks: function(callback) {
