@@ -135,6 +135,7 @@ $(function() {
 				taskManager.addTask(task, function(result) {
 					if (result) {
 						initProjects();
+						initTasks();
 					}
 					else {
 						bootbox.alert("添加失败！");
@@ -176,6 +177,7 @@ $(function() {
 			e.stopPropagation();
 			taskManager.deferTask(getTaskId(this), function() {
 				initProjects();
+				initTasks();
 			});
 		};
 		var editTask = function(e) {
@@ -192,6 +194,7 @@ $(function() {
 					taskManager.updateTask(task, function(result) {
 						if (result) {
 							initProjects();
+							initTasks();
 						}
 						else {
 							bootbox.alert("修改失败！");
